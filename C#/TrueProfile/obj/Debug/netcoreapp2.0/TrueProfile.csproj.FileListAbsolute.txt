@@ -1,0 +1,11 @@
+/Users/divum/Projects/TrueProfile/TrueProfile/bin/Debug/netcoreapp2.0/TrueProfile.deps.json
+/Users/divum/Projects/TrueProfile/TrueProfile/bin/Debug/netcoreapp2.0/TrueProfile.runtimeconfig.json
+/Users/divum/Projects/TrueProfile/TrueProfile/bin/Debug/netcoreapp2.0/TrueProfile.runtimeconfig.dev.json
+/Users/divum/Projects/TrueProfile/TrueProfile/bin/Debug/netcoreapp2.0/TrueProfile.dll
+/Users/divum/Projects/TrueProfile/TrueProfile/bin/Debug/netcoreapp2.0/TrueProfile.pdb
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.csprojResolveAssemblyReference.cache
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.csproj.CoreCompileInputs.cache
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.AssemblyInfoInputs.cache
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.AssemblyInfo.cs
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.dll
+/Users/divum/Projects/TrueProfile/TrueProfile/obj/Debug/netcoreapp2.0/TrueProfile.pdb
