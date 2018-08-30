@@ -1,3 +1,3 @@
 module.exports = {
-  PUBLIC_KEY_URL: 'http://api4.truecaller.com/v1/key'
+  PUBLIC_KEY_URL: 'https://api4.truecaller.com/v1/key'
 };

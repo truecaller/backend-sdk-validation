@@ -9,6 +9,7 @@ var request = require('request');
 var _ = require('underscore');
 var async = require('async');
 var pemtools = require('pemtools');
+const crypto = require('crypto');
 
 function _fetchPublicKey(callback) {
   var options = {
