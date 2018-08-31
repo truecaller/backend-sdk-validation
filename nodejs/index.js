@@ -53,6 +53,8 @@ function _deconstructProfile(profile, callback) {
     delete(_profile.signature);
     delete(_profile.signatureAlgorithm);
     delete(_profile.payload);
+    delete(_profile.isSimChanged);
+    delete(_profile.verificationTimestamp);
 
     result.profile = _profile;
     result.signature = profile.signature;
