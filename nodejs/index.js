@@ -9,6 +9,7 @@ var request = require('request');
 var _ = require('underscore');
 var async = require('async');
 var pemtools = require('pemtools');
+const crypto = require('crypto');
 
 function _fetchPublicKey(callback) {
   var options = {
@@ -52,6 +53,9 @@ function _deconstructProfile(profile, callback) {
     delete(_profile.signature);
     delete(_profile.signatureAlgorithm);
     delete(_profile.payload);
+    delete(_profile.isSimChanged);
+    delete(_profile.verificationTimestamp);
+    delete(_profile.verificationMode);
 
     result.profile = _profile;
     result.signature = profile.signature;
@@ -81,7 +85,6 @@ function _verifyPayload(profile, callback) {
     if (truecallerProfile.decodedPayload.hasOwnProperty('requestTime')) {
       delete truecallerProfile.decodedPayload.requestTime;
     }
-
     if (_.isEqual(truecallerProfile.profile, truecallerProfile.decodedPayload)) {
       return callback(null, true);
     } else {
@@ -141,7 +144,6 @@ function _verifyProfile(profile, callback) {
         if (err) {
           return cb(err);
         }
-
         return cb(null, result);
       });
     },
@@ -151,7 +153,6 @@ function _verifyProfile(profile, callback) {
         if (err) {
           return cb(err);
         }
-
         return cb(null, result);
       });
     }
