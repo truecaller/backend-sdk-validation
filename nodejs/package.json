@@ -17,16 +17,16 @@
     "verification",
     "server"
   ],
-  "author": "\"Sahil Narain <sahil.narain@gmail.com> (https://github.com/sahilnarain)",
+  "author": "Truecaller",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sahilnarain/truecaller/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/sahilnarain/truecaller#readme",
+  "homepage": "https://github.com/truecaller",
   "dependencies": {
     "async": "2.1.5",
     "pemtools": "0.4.7",
     "request": "2.79.0",
-    "underscore": "1.8.3"
+    "underscore": "1.12.1"
   }
 }
