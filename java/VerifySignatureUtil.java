@@ -1,12 +1,11 @@
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.Signature;
+package com.truecaller.examples.sdk.profile;
+
 import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-
-import com.google.api.client.util.Base64;
-
-import javax.xml.bind.DatatypeConverter;
+import java.security.KeyFactory;
+import java.security.Signature;
+import java.util.Base64;
 
 public class VerifySignatureUtil {
 
@@ -21,10 +20,10 @@ public class VerifySignatureUtil {
      */
     public static boolean verify(final String keyType, final String publicKeyString, final String payload, final String signedString, final String signatureAlgorithm) throws Exception {
 
-        final byte[] publicKeyBytes = DatatypeConverter.parseBase64Binary(publicKeyString);
+        final byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
         final PublicKey publicKey =  KeyFactory.getInstance(keyType).generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 
-        final byte[] signatureByteArray = Base64.decodeBase64(signedString.getBytes(StandardCharsets.UTF_8));
+        final byte[] signatureByteArray = Base64.getDecoder().decode(signedString.getBytes(StandardCharsets.UTF_8));
         final byte[] payloadArray = payload.getBytes(StandardCharsets.UTF_8);
 
         Signature vSignature = Signature.getInstance(signatureAlgorithm);
