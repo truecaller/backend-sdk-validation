@@ -1,174 +1,54 @@
 'use strict';
 
-const CONFIG = require('./config.js');
+const pemtools = require('pemtools'),
+  crypto = require('crypto'),
+  https = require('https');
+;
 const ALGO_MAP = {
   'SHA512withRSA': 'RSA-SHA512'
 };
 
-var request = require('request');
-var _ = require('underscore');
-var async = require('async');
-var pemtools = require('pemtools');
-const crypto = require('crypto');
+function fetchPublicKey(callback) {
+  https.get("https://api4.truecaller.com/v1/key", res => {
+    var data = [];
 
-function _fetchPublicKey(callback) {
-  var options = {
-    url: CONFIG.PUBLIC_KEY_URL,
-    method: 'GET',
-    json: true
-  };
+    res.on('data', chunk => {
+      data.push(chunk);
+    });
 
-  request(options, function (err, response, body) {
-    if (err) {
-      return callback(err);
-    }
+    res.on('end', () => {
+      const result = JSON.parse(Buffer.concat(data).toString());
+      if (result.length < 1)
+        callback("Invalid response while fetching public key");
+      else
+        callback(null, result[0]);
 
-    if (!body || body.length === 0 || !body[0].key, !body[0].keyType) {
-      return callback('Failed to read public key from key server.');
-    }
-
-    return callback(null, body[0]);
+    });
+  }).on('error', err => {
+    callback(err.message);
   });
 }
 
-function _getDecodedPayloadFromProfile(profile, callback) {
-  if (!profile.payload) {
-    return callback('Error: Profile does not contain payload');
-  }
-
-  try {
-    var payload = JSON.parse(new Buffer(profile.payload, 'base64').toString());
-    return callback(null, payload);
-  } catch (e) {
-    return callback(e);
-  }
-};
-
-function _deconstructProfile(profile, callback) {
-  try {
-    var result = {};
-
-    var _profile = JSON.parse(JSON.stringify(profile));
-
-    delete(_profile.signature);
-    delete(_profile.signatureAlgorithm);
-    delete(_profile.payload);
-    delete(_profile.isSimChanged);
-    delete(_profile.verificationTimestamp);
-    delete(_profile.verificationMode);
-
-    result.profile = _profile;
-    result.signature = profile.signature;
-    result.signatureAlgorithm = profile.signatureAlgorithm;
-    result.payload = profile.payload;
-
-    _getDecodedPayloadFromProfile(profile, function (err, decodedPayload) {
-      if (err) {
-        return callback(err);
-      }
-
-      result.decodedPayload = decodedPayload;
-
-      return callback(null, result);
-    });
-  } catch (e) {
-    return callback(e);
-  }
-};
-
-function _verifyPayload(profile, callback) {
-  _deconstructProfile(profile, function (err, truecallerProfile) {
+function verify(profile, cb) {
+  fetchPublicKey(function (err, keyResult) {
     if (err) {
-      return callback(err);
-    }
-
-    if (truecallerProfile.decodedPayload.hasOwnProperty('requestTime')) {
-      delete truecallerProfile.decodedPayload.requestTime;
-    }
-    if (_.isEqual(truecallerProfile.profile, truecallerProfile.decodedPayload)) {
-      return callback(null, true);
+      cb(err, null);
     } else {
-      return callback(null, false);
+      const keyStr = keyResult.key;
+      var keyBytes = Buffer.from(pemtools(Buffer.from(keyStr, 'base64'), 'PUBLIC KEY').pem);
+      var payload = Buffer.from(profile.payload);
+      var signature = Buffer.from(profile.signature, 'base64');
+      var signatureAlgorithm = ALGO_MAP[profile.signatureAlgorithm];
+
+      var verifier = crypto.createVerify(signatureAlgorithm);
+      verifier.update(payload);
+
+      var signatureVerificationResult = verifier.verify(keyBytes, signature);
+      cb(null, signatureVerificationResult);
     }
   });
-};
-
-function _verifySignature(profile, callback) {
-  async.waterfall([
-    function (cb) {
-      _fetchPublicKey(function (err, result) {
-        if (err) {
-          return cb(err);
-        }
-
-        return cb(null, result.keyType, result.key);
-      });
-    },
-
-    function (keyType, key, cb) {
-      _deconstructProfile(profile, function (err, result) {
-        if (err) {
-          return cb(err);
-        }
-
-        return cb(null, keyType, key, result.payload, result.signature, result.signatureAlgorithm);
-      });
-    },
-
-    function (keyType, key, payload, signature, signatureAlgorithm, cb) {
-      var _key = Buffer.from(pemtools(Buffer.from(key, 'base64'), 'PUBLIC KEY').pem);
-      var _payload = Buffer.from(payload);
-      var _signature = Buffer.from(signature, 'base64');
-      var _signatureAlgorithm = ALGO_MAP[signatureAlgorithm];
-
-      var verifier = crypto.createVerify(_signatureAlgorithm);
-      verifier.update(_payload);
-
-      var signatureVerificationResult = verifier.verify(_key, _signature);
-
-      return cb(null, signatureVerificationResult);
-    }
-  ], function (err, result) {
-    if (err) {
-      return callback(err);
-    }
-
-    return callback(null, result);
-  });
-};
-
-function _verifyProfile(profile, callback) {
-  async.parallel([
-    function (cb) {
-      _verifyPayload(profile, function (err, result) {
-        if (err) {
-          return cb(err);
-        }
-        return cb(null, result);
-      });
-    },
-
-    function (cb) {
-      _verifySignature(profile, function (err, result) {
-        if (err) {
-          return cb(err);
-        }
-        return cb(null, result);
-      });
-    }
-  ], function (err, results) {
-    if (err) {
-      return callback(err);
-    }
-
-    if (results[0] === true && results[1] === true) {
-      return callback(null, true);
-    } else {
-      return callback(null, false);
-    }
-  });
-};
+}
 
 exports = module.exports = {
-  verifyProfile: _verifyProfile
+  verifyProfile: verify
 };
