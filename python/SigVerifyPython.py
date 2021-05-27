@@ -12,7 +12,7 @@ payload = "your-payload"
 
 signature = "your-signature"
 
-signature_algorithm = "SHA512withRSA"
+signature_algorithm = "SHA512withRSA" #change if required
 keytype = "RSA"
 
 # Creating hash for the payload object
