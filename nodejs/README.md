@@ -1,14 +1,12 @@
-# truecaller
-An npm module which provides an easy way to verify Truecaller user profiles on the server side.
+# Verify Profile
 
-# Installation
-`npm install truecaller`
-
-# Usage
-    var truecaller = require('truecaller');
+## Usage
+See `demo.js` for example
+```javascript
+    const verifier = require("./index");
     var profile = ... // Truecaller profile object from the mobile SDK
     
-    truecaller.verifyProfile(profile, function(err, verificationResult) {
+    verifier.verifyProfile(profile, function(err, verificationResult) {
         if(err) {
             // Oops, something went wrong
         }
@@ -20,7 +18,4 @@ An npm module which provides an easy way to verify Truecaller user profiles on t
             ...
         }
     });
-    
-# Coming soon
-    - Examples
-    - Test cases
+```

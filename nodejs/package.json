@@ -24,9 +24,6 @@
   },
   "homepage": "https://github.com/truecaller",
   "dependencies": {
-    "async": "2.1.5",
-    "pemtools": "0.4.7",
-    "request": "2.79.0",
-    "underscore": "1.12.1"
+    "pemtools": "0.4.7"
   }
 }
