@@ -1,0 +1,24 @@
+{
+  "name": "truecaller-profile-validation",
+  "version": "1.0.0",
+  "description": "Validate truecaller profile",
+  "main": "index.js",
+  "keywords": [
+    "truecaller",
+    "profile",
+    "sdk",
+    "verification",
+    "validation",
+    "server"
+  ],
+  "author": "Truecaller",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "https://github.com/truecaller",
+  "dependencies": {
+    "node-cache": "5.1.2",
+    "pemtools": "0.4.7"
+  }
+}
