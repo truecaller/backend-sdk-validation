@@ -32,5 +32,9 @@ public class VerifySignatureUtil {
 
         return vSignature.verify(signatureByteArray);
     }
+
+    private static String get(String[] args, int index, String fallback) {
+        return (args.length > index) ? args[index] : fallback;
+    }
 }
 
