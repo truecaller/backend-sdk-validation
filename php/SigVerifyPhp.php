@@ -5,7 +5,7 @@ use phpseclib3\Crypt\RSA;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 	// Signature from SDK Response
-	$signature = "<<>SIGNATURE_STRING_FROM_TRUECALLER_SDK>";
+	$signature = "<<SIGNATURE_STRING_FROM_TRUECALLER_SDK>>";
 
 	// Payload from SDK response
 	$package = "<<PAYLOAD_STRING_FROM_TRUECALLER_SDK>>";
