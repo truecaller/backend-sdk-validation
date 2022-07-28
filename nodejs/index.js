@@ -49,6 +49,12 @@ function verify(profile, cb) {
   });
 }
 
+function profileData(profile) {
+  return JSON.parse((Buffer.from(profile.payload, 'base64')).toString());
+}
+ 
 exports = module.exports = {
-  verifyProfile: verify
+  verifyProfile: verify,
+  getProfileData: profileData
 };
+ 
